@@ -1,0 +1,24 @@
+#!/bin/bash
+# combustion: network
+# from: https://en.opensuse.org/Portal:MicroOS/Combustion
+# Redirect output to the console
+exec > >(exec tee -a /dev/tty0) 2>&1
+# FIXME: use hashed password!
+echo 'root:Admin123' | chpasswd 
+# Add a public ssh key and enable sshd
+mkdir -pm700 /root/.ssh/
+# FIXME: Your own public ssh keys!
+# below is content of microos_id_ed25519.pub
+cat >> /root/.ssh/authorized_keys <<EOF
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICn9B9sM6R1XvvG+cBmv9/6E+qqSWXSlvMWuyIcrRcFq root@host
+EOF
+systemctl enable sshd.service
+# Install vim-small
+zypper --non-interactive install vim mc
+# Leave a marker
+{
+	echo "Configured with combustion on `date`" 
+	echo "use SSH Key 'microos_id_ed25519' to login as root remotely" 
+} > /etc/issue.d/combustion
+# Close outputs and wait for tee to finish.
+exec 1>&- 2>&-; wait;
