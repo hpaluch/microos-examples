@@ -1,6 +1,14 @@
 # MicroOS setup using Ignition
 
-This sample uses Ignition config file (introduced by Fedora CoreOS).
+This sample uses Ignition config file (introduced by Fedora CoreOS). It does:
+
+- creates `core` user with `sudo` rights to get root access (to mimic Fedora
+  CoreOS default account). This user can log remotely with ssh key
+  `../microos_id_ed25519`
+- setup password (`Admin123`) and SSH access with above key
+  `../microos_id_ed25519`
+
+How Butane/Ignition works?
 
 It has following flow:
 
@@ -17,4 +25,10 @@ It has following flow:
 So in summary:
 - you will specify all required configuration in YAML file [config.bu.yaml](config.bu.yaml)
 
+To run this example you need to fulfill requirements from parent [../README.md](../README.md)
+and additionally install:
 
+1. `butane` binary - download latest from https://github.com/coreos/butane/tags
+2. `mkisofs` (on openSUSE LEAP host using `sudo zypper in mkisofs` command)
+
+When ready invoke `./create-libvirt-vm.sh` from GUI and watch console...

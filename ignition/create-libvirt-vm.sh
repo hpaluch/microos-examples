@@ -69,7 +69,8 @@ virt-install --connect="qemu:///system" --name="${VM_NAME}" --vcpus="${VCPUS}" -
 set +x
 cat <<EOF
 If installation finished without error you can login with:
-ssh -i ../microos_id_ed25519 root@MICRO_OS_IP_ADDRESS
-Or login on local console as 'root' password 'Admin123'
+a) ssh -i ../microos_id_ed25519 root@MICRO_OS_IP_ADDRESS
+b) ssh -i ../microos_id_ed25519 core@MICRO_OS_IP_ADDRESS (to mimic Fedora CoreOS user)
+c) login on local console as 'root' password 'Admin123'
 EOF
 exit 0

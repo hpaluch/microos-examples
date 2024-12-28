@@ -9,6 +9,10 @@ storage:
       mount_options:
         - "subvol=/@/home"
   files:
+    - path: /etc/sudoers.d/99local  # file may not contain dot '.' see sudoers(5)
+      contents:
+        inline: |
+          %wheel ALL=(ALL:ALL) NOPASSWD: ALL
     - path: /etc/hostname
       overwrite: true
       contents:
@@ -19,11 +23,16 @@ storage:
         - inline: |
             127.0.0.2 uos-ign.example.com uos-ign
 passwd:
+  groups:
+    - name: wheel
+      system: true
   users:
     - name: root
       password_hash: '$6$tZHO6G1SC8xvduBN$IG2QkzpmDxQw9bYz7MTTrigS83TtHacYY6t8Ea7qcpHt/81pwEc1.pTsCNC3O0RT4fB82kCxQs6OP7XwVKB071'
       ssh_authorized_keys_local:
         - microos_id_ed25519.pub
     - name: core
+      groups:
+        - wheel
       ssh_authorized_keys_local:
         - microos_id_ed25519.pub
