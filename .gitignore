@@ -2,10 +2,8 @@
 *~
 *.bak
 
-# create by PhotoScape
-Originals/
-*.db
-
-# local bundler packages created with "bundle install --path vendor/bundle"
-vendor/
+# Ignition and helper files
+*.ign
+*.iso
+disk/
 

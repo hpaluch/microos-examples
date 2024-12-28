@@ -1,6 +1,7 @@
 # openSUSE MicroOS examples
 
 Here are example(s) using openSUSE MicroOS from https://get.opensuse.org/microos/
+MicroOS is alternative to Fedora CoreOS.
 
 We will use LibVirt's `virt-install` to setup MicroOS VM and set root password and root SSH key.
 
@@ -24,6 +25,21 @@ Download suitable MicroOS disk image using:
   curl -fLO https://download.opensuse.org/tumbleweed/appliances/openSUSE-MicroOS.x86_64-kvm-and-xen.qcow2 )
 ```
 
+# Combustion vs. Butane/Ignition
+
+MicroOS supports two different configuration mechanisms to setup new system:
+
+1. Combustion - valid for MicroOS only - basically trivial shell script.
+   See https://en.opensuse.org/Portal:MicroOS/Combustion for details.
+2. Ignition - used by Fedora CoreOS. Ignition JSON file is generated from input Butane YAML file.
+   See https://en.opensuse.org/Portal:MicroOS/Ignition for details.
+
+## Combustion: example
+
+Combustion is native MicroOS configuration example - it is basically single
+shell script (and that's all). But beware! It runs in initrd (initial ramdisk
+context, so many thinks are not available there!
+
 Review Combustion (configuration) script [./combustion-script](./combustion-script)
 
 Review script [./create-libvirt-vm.sh](./create-libvirt-vm.sh) and run it.
@@ -38,6 +54,10 @@ ssh -i microos_id_ed25519 root@IP_OF_VM
 
 > [!WARNING]
 > Again - please never use that private SSH key `microos_id_ed25519*` in production!
+
+## Ignition: example
+
+Please see example in [ignition/](ignition/) directory.
 
 # Bugs
 
