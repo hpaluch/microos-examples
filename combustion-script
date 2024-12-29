@@ -1,24 +1,44 @@
 #!/bin/bash
 # combustion: network
 # from: https://en.opensuse.org/Portal:MicroOS/Combustion
+set -xeuo pipefail # fail on error, pipe error or on undefined variables
+
+# customizable variables
+h=uos-hello # hostname: uos = MicroOS
+root_pw=Admin123
+# copied from microos_id_ed25519.pub
+ssh_key='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICn9B9sM6R1XvvG+cBmv9/6E+qqSWXSlvMWuyIcrRcFq root@host'
+
 # Redirect output to the console
 exec > >(exec tee -a /dev/tty0) 2>&1
+echo $h > /etc/hostname
+echo "127.0.0.2 $h.example.com $h" >> /etc/hosts
 # FIXME: use hashed password!
-echo 'root:Admin123' | chpasswd 
+echo "root:$root_pw" | chpasswd
 # Add a public ssh key and enable sshd
 mkdir -pm700 /root/.ssh/
 # FIXME: Your own public ssh keys!
 # below is content of microos_id_ed25519.pub
-cat >> /root/.ssh/authorized_keys <<EOF
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICn9B9sM6R1XvvG+cBmv9/6E+qqSWXSlvMWuyIcrRcFq root@host
-EOF
+echo "$ssh_key" >> /root/.ssh/authorized_keys
 systemctl enable sshd.service
-# Install vim-small
-zypper --non-interactive install vim mc
+
+# setup 'core' user with sudo rights (to match Fedora Core OS)
+groupadd -r wheel
+useradd -m -s /bin/bash -G wheel core
+mount /home
+mkdir -pm700 /home/core/.ssh/
+echo "$ssh_key" >>  /home/core/.ssh/authorized_keys
+chown core:core -R /home/core/.ssh
+umount /home
+echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/99local
+
+# Install vim (full), Midnight Commander, ifconfig, nslookup
+zypper --non-interactive install vim mc net-tools-deprecated bind-utils
 # Leave a marker
-{
-	echo "Configured with combustion on `date`" 
-	echo "use SSH Key 'microos_id_ed25519' to login as root remotely" 
-} > /etc/issue.d/combustion
+cat > /etc/issue.d/combustion <<EOF
+Configured with combustion on `date`
+- use SSH Key with 'ssh -i microos_id_ed25519 ...' to login as 'root' or 'core' user remotely
+- or login as 'root' using password '$root_pw' on local console
+EOF
 # Close outputs and wait for tee to finish.
 exec 1>&- 2>&-; wait;

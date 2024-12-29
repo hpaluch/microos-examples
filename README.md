@@ -49,7 +49,10 @@ Watch on GUI console installation progress - once there appear Login prompt you 
 - login remotely as `root` with provided private key `microos_id_ed25519` using command like:
 
 ```shell
+# to login as root via SSH
 ssh -i microos_id_ed25519 root@IP_OF_VM
+# to login as user 'core' via SSH
+ssh -i microos_id_ed25519 core@IP_OF_VM
 ```
 
 > [!WARNING]
