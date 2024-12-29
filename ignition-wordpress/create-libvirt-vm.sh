@@ -69,7 +69,8 @@ virt-install --connect="qemu:///system" --name="${VM_NAME}" --vcpus="${VCPUS}" -
 set +x
 cat <<EOF
 If installation finished without error you can
-1. setup WordPress by pointing your browser to http://IP_OF_MICROOS
+1. reboot your VM to ensure automatic startup of Podman containers
+2. setup WordPress by pointing your browser to http://IP_OF_MICROOS
 
 Or login to system with:
 a) ssh -i ../microos_id_ed25519 root@MICRO_OS_IP_ADDRESS

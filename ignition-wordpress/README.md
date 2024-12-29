@@ -12,10 +12,11 @@ This sample uses Ignition config file (introduced by Fedora CoreOS). It does:
 
 Usage:
 - run `create-libvirt-vm.sh` and follow instructions on both VM login and script.
-- at the end you have to point your browser to `http://IP_OF_VM` to setup WordPress
-  installation
-- NOTE: script finishes only when VM execution is finished (you can use `sudo poweroff` inside
-  VM to shutdown it)
+- at the end you have to reboot your VM to trigger startup of Podman containers
+  (or login as `core` user should also trigger it)
+- next point your browser to `http://IP_OF_VM` to setup WordPress installation
+- NOTE: `create-libvirt-vm.sh` script finishes only when VM execution is
+  finished (you can use `sudo poweroff` inside VM to shutdown it)
 
 How Butane/Ignition works?
 
