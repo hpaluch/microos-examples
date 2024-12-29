@@ -68,7 +68,10 @@ virt-install --connect="qemu:///system" --name="${VM_NAME}" --vcpus="${VCPUS}" -
         --network bridge=virbr0 "${IGNITION_DEVICE_ARG[@]}" --install no_install=yes
 set +x
 cat <<EOF
-If installation finished without error you can login with:
+If installation finished without error you can
+1. setup WordPress by pointing your browser to http://IP_OF_MICROOS
+
+Or login to system with:
 a) ssh -i ../microos_id_ed25519 root@MICRO_OS_IP_ADDRESS
 b) ssh -i ../microos_id_ed25519 core@MICRO_OS_IP_ADDRESS (to mimic Fedora CoreOS user)
 c) login on local console as 'root' password 'Admin123'

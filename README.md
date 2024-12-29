@@ -3,6 +3,12 @@
 Here are example(s) using openSUSE MicroOS from https://get.opensuse.org/microos/
 MicroOS is alternative to Fedora CoreOS.
 
+> [!NOTE]
+> WordPress example files come from Major Hayden project: https://github.com/major/quadlets-wordpress
+> These files include folders [caddy/](caddy/), [quadlets/](quadlets/) and [services/](services/)
+> and most part of [ignition-wordpress/config.bu.yaml](ignition-wordpress/config.bu.yaml).
+> All files here are provided under permissive Apache license.
+
 We will use LibVirt's `virt-install` to setup MicroOS VM and set root password and root SSH key.
 
 > [!WARNING]
@@ -62,9 +68,12 @@ ssh -i microos_id_ed25519 core@IP_OF_VM
 
 Please see example in [ignition/](ignition/) directory.
 
-## Ignitiont: WordPress example
+## Ignition: WordPress example
 
-Work in Progress: [ignition-wordpress/](ignition-wordpress/)
+Full WordPress example using Podman. Ported from https://github.com/major/quadlets-wordpress
+which is designed for Fedora CoreOS 41.
+
+You can find it under: [ignition-wordpress/](ignition-wordpress/)
 
 # Bugs
 

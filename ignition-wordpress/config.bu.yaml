@@ -1,6 +1,37 @@
 variant: fcos
 version: 1.5.0
 storage:
+  directories:
+    - path: /home/core/.config
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/caddy
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/systemd
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/systemd/user
+      user:
+        name: core
+      group:
+        name: core
   filesystems:
     - path: /home
       device: "/dev/vda3"
@@ -13,8 +44,9 @@ storage:
       contents:
         inline: |
           Butane/Ignition setup completed
-          - on local console you can login as 'root'
-          - or you can login as 'core' or as 'root' remotely via SSH
+          - now point your browser to http://IP_OF_THIS_VM to finish WordPress setup
+          - or login to local console as 'root' password 'Admin123'
+          - or you can login as 'core' or as 'root' remotely via SSH using projects microos_id_ed25519 key
     - path: /etc/sudoers.d/99local  # file may not contain dot '.' see sudoers(5)
       contents:
         inline: |
@@ -28,6 +60,118 @@ storage:
       append:
         - inline: |
             127.0.0.2 uos-wp.example.com uos-wp
+    # WordPress related files from: https://github.com/major/quadlets-wordpress
+    - path: /etc/systemd/user/podman-user-wait-network-online.service
+      contents:
+        local: services/podman-user-wait-network-online.service
+    - path: /var/lib/systemd/linger/core
+      mode: 0644
+    - path: /etc/sysctl.d/90-caddy.conf
+      contents:
+        inline: |
+          net.ipv4.ip_unprivileged_port_start = 80
+          net.core.rmem_max=2500000
+          net.core.wmem_max=2500000
+    - path: /home/core/.config/containers/containers-environment
+      contents:
+        inline: |
+          MYSQL_DATABASE=wordpress
+          MYSQL_USER=wordpress
+          MYSQL_ROOT_PASSWORD=mariadb-needs-a-secure-password
+          MYSQL_PASSWORD=wordpress-needs-a-secure-password
+          WORDPRESS_DB_HOST=mariadb
+          WORDPRESS_DB_USER=wordpress
+          WORDPRESS_DB_PASSWORD=wordpress-needs-a-secure-password
+          WORDPRESS_DB_NAME=wordpress
+      mode: 0644
+
+    - path: /home/core/.config/caddy/Caddyfile
+      contents:
+        local: caddy/Caddyfile
+      mode: 0644
+      user:
+        name: core
+      group:
+        name: core
+
+    - path: /home/core/.config/containers/systemd/caddy-config.volume
+      contents:
+        inline: |
+          [Volume]
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd/caddy-data.volume
+      contents:
+        inline: |
+          [Volume]
+      user:
+        name: core
+      group:
+        name: core
+
+    - path: /home/core/.config/containers/systemd/wordpress.volume
+      contents:
+        inline: |
+          [Volume]
+      user:
+        name: core
+      group:
+        name: core
+
+    - path: /home/core/.config/containers/systemd/mariadb.volume
+      contents:
+        inline: |
+          [Volume]
+      user:
+        name: core
+      group:
+        name: core
+
+    - path: /home/core/.config/containers/systemd/wordpress.network
+      contents:
+        inline: |
+          [Network]
+          DisableDNS=false
+          Internal=false
+      user:
+        name: core
+      group:
+        name: core
+
+    - path: /home/core/.config/containers/systemd/mariadb.container
+      contents:
+        local: quadlets/mariadb.container
+      mode: 0644
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.config/containers/systemd/wordpress.container
+      contents:
+        local: quadlets/wordpress.container
+      mode: 0644
+      user:
+        name: core
+      group:
+        name: core
+
+    - path: /home/core/.config/containers/systemd/caddy.container
+      contents:
+        local: quadlets/caddy.container
+      mode: 0644
+      user:
+        name: core
+      group:
+        name: core
+  links:
+    - path: /home/core/.config/systemd/user/timers.target.wants/podman-auto-update.timer
+      target: /usr/lib/systemd/user/podman-auto-update.timer
+      user:
+        name: core
+      group:
+        name: core
 passwd:
   groups:
     - name: wheel
