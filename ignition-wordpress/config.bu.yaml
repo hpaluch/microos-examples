@@ -1,0 +1,44 @@
+variant: fcos
+version: 1.5.0
+storage:
+  filesystems:
+    - path: /home
+      device: "/dev/vda3"
+      format: btrfs
+      wipe_filesystem: false
+      mount_options:
+        - "subvol=/@/home"
+  files:
+    - path: /etc/issue.d/ignition
+      contents:
+        inline: |
+          Butane/Ignition setup completed
+          - on local console you can login as 'root'
+          - or you can login as 'core' or as 'root' remotely via SSH
+    - path: /etc/sudoers.d/99local  # file may not contain dot '.' see sudoers(5)
+      contents:
+        inline: |
+          %wheel ALL=(ALL:ALL) NOPASSWD: ALL
+    - path: /etc/hostname
+      overwrite: true
+      contents:
+        inline: |
+          uos-wp
+    - path: /etc/hosts
+      append:
+        - inline: |
+            127.0.0.2 uos-wp.example.com uos-wp
+passwd:
+  groups:
+    - name: wheel
+      system: true
+  users:
+    - name: root
+      password_hash: '$6$tZHO6G1SC8xvduBN$IG2QkzpmDxQw9bYz7MTTrigS83TtHacYY6t8Ea7qcpHt/81pwEc1.pTsCNC3O0RT4fB82kCxQs6OP7XwVKB071'
+      ssh_authorized_keys_local:
+        - microos_id_ed25519.pub
+    - name: core
+      groups:
+        - wheel
+      ssh_authorized_keys_local:
+        - microos_id_ed25519.pub

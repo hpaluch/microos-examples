@@ -62,6 +62,10 @@ ssh -i microos_id_ed25519 core@IP_OF_VM
 
 Please see example in [ignition/](ignition/) directory.
 
+## Ignitiont: WordPress example
+
+Work in Progress: [ignition-wordpress/](ignition-wordpress/)
+
 # Bugs
 
 You need to run `virt-install` in GUI - I was not able to setup properly serial

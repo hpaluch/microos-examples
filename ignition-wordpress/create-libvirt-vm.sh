@@ -7,14 +7,14 @@ set -x
 DIR=`dirname $0`
 BUTANE_CONFIG="$(readlink -f $DIR/config.bu.yaml)"
 IGNITION_CONFIG="$(readlink -f $DIR/config.ign)"
-# Download with: curl -fLO https://download.opensuse.org/tumbleweed/appliances/openSUSE-MicroOS.x86_64-kvm-and-xen.qcow2
-IMAGE="/opt/iso/openSUSE-MicroOS.x86_64-kvm-and-xen.qcow2"
-# 'u' is like greek 'micro' symbol
-VM_NAME="uos-ign"
+# Download with: curl -fLO https://download.opensuse.org/tumbleweed/appliances/openSUSE-MicroOS.x86_64-ContainerHost-kvm-and-xen.qcow2
+IMAGE="/opt/iso/openSUSE-MicroOS.x86_64-ContainerHost-kvm-and-xen.qcow2"
+# 'u' is like greek 'micro' symbol for MicroOS
+VM_NAME="uos-wp"
 VCPUS="2"
-RAM_MB="2048"
+RAM_MB="4096"
 # 20GB is minimum!
-# check minimum with: qemu-img info /opt/iso/openSUSE-MicroOS.x86_64-kvm-and-xen.qcow2 | grep 'virtual size:'
+# check minimum with: qemu-img info /opt/iso/openSUSE-MicroOS.x86_64-ContainerHost-kvm-and-xen.qcow2 | grep 'virtual size:'
 DISK_GB="20"
 
 [ -r "$BUTANE_CONFIG" ] || {
@@ -25,7 +25,7 @@ DISK_GB="20"
 [ -r "$IMAGE" ] || {
 	cat >&2 <<EOF
 ERROR: Image '$IMAGE' not readable.
-Download it with: ( cd /opt/iso && curl -fLO https://download.opensuse.org/tumbleweed/appliances/openSUSE-MicroOS.x86_64-kvm-and-xen.qcow2 )
+Download it with: ( cd /opt/iso && curl -fLO https://download.opensuse.org/tumbleweed/appliances/openSUSE-MicroOS.x86_64-ContainerHost-kvm-and-xen.qcow2 )
 and run this script again.
 EOF
 	exit 1
